@@ -49,8 +49,111 @@ namespace Encog.Util.NetworkUtil
             }
             return (result);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        ///     Prepare realtime inputs (or outputs / ideals), and place them in an understandable one
+        ///     dimensional input neuron array. This method does not use linq. you can use this method if
+        ///     you have many inputs and need to format them as inputs with a specified "window"/input
+        ///     size. You can add as many inputs as wanted to this input layer (parametrable inputs).
+        /// </summary>
+        ///
+        /// <remarks>   Olivier, 3/2/2012. </remarks>
+        ///
+        /// <param name="inputsize">    The inputsize. </param>
+        /// <param name="firstinputt">  The firstinputt. </param>
+        ///
+        /// <returns>   . </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static double[][] MakeDimensionalArray(int inputsize, params double[][] firstinputt)
+        {
+            ArrayList arlist = new ArrayList(4);
+            ArrayList firstList = new ArrayList();
+            List<double> listused = new List<double>();
+            int lenghtofArrays = firstinputt[0].Length;
+            //There must be NO modulo...or the arrays would not be divisible by this input size.
+            if (lenghtofArrays % inputsize != 0)
+                return null;
+            //we add each input one , after the other in a list of doubles till we reach the input size
+            for (int i = 0; i < lenghtofArrays; i++)
+            {
+                for (int k = 0; k < firstinputt.Length; k++)
+                {
+                    if (listused.Count < inputsize * firstinputt.Length)
+                    {
+                        listused.Add(firstinputt[k][i]);
+                        if (listused.Count == inputsize * firstinputt.Length)
+                        {
+                            firstList.Add(listused.ToArray());
+                            listused.Clear();
+                        }
+                    }
+                }
+            }
+            return (double[][])firstList.ToArray(typeof(double[]));
+        }
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        ///     Makes a data set with parametrable inputs and one output double array (which will also be
+        ///     cut into a dimensional array by input count). you can provide as many inputs as needed
+        ///     and the timelapse size (input size), and timelapse on outputs (single dimension array).
+        ///     If you need [][] arrays for outputs use MakeDimensionalArray method.
+        /// </summary>
+        ///
+        /// <remarks>   Olivier, 3/2/2012. </remarks>
+        ///
+        /// <param name="outputs">      The outputs. </param>
+        /// <param name="outputSize">   Size of the output. </param>
+        /// <param name="inputsize">    The inputsize. </param>
+        /// <param name="firstinputt">  The firstinputt. </param>
+        ///
+        /// <returns>a ready to use IMLDataset</returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static IMLDataSet MakeDataSet(double[] outputs, int outputSize, int inputsize, params double[][] firstinputt)
+        {
+            ArrayList outputsar = new ArrayList();
+            ArrayList FirstList = new ArrayList();
+            List<double> listused = new List<double>();
+            //Lets get the length of the inputs.
+            int lenghtofArrays = firstinputt[0].Length;
+            //There must be NO modulo...or the arrays would not be divisile by this input size.
+            if (lenghtofArrays % inputsize != 0)
+                return null;
+            //we add each input one , after the other in a list of doubles till we reach the input size
+            for (int i = 0; i < lenghtofArrays; i++)
+            {
+                for (int k = 0; k < firstinputt.Length; k++)
+                {
+                    //we divide the array into 1 dimensional arrays where each size is input size.
+                    if (listused.Count < inputsize * firstinputt.Length)
+                    {
+                        listused.Add(firstinputt[k][i]);
+                        if (listused.Count == inputsize * firstinputt.Length)
+                        {
+                            FirstList.Add(listused.ToArray());
+                            listused.Clear();
+                        }
+                    }
+                }
+            }
+            //Lets clear our temp serie holder., so we can use it again on the output array.
+            listused.Clear();
+            foreach (double d in outputs)
+            {
+                listused.Add(d);
+                //if we have enough in our list (as the output size) , we add it to the main output array (to get a proper dimension array for encog).
+                if (listused.Count == outputSize)
+                {
+                    outputsar.Add(listused.ToArray());
+                    listused.Clear();
+                }
+            }
+            IMLDataSet set = new BasicMLDataSet((double[][])FirstList.ToArray(typeof(double[])), (double[][])outputsar.ToArray(typeof(double[])));
+            return set;
+        }
 
         /// <summary>
         /// Doubles the List of doubles into a jagged array.
@@ -177,7 +280,7 @@ namespace Encog.Util.NetworkUtil
 
     /// <summary>
     /// Grabs every Predict point in a double serie.
-    /// This is useful if you have a double series and you need to grab every 5 points for examples and make an ourput serie (like in elmhan networks).
+    /// This is useful if you have a double series and you need to grab every 5 points for examples and make an output serie (like in elmhan networks).
     /// E.G , 1, 2, 1, 2,5 ...and you just need the 5..
     /// </summary>
     /// <param name="inputs">The inputs.</param>
@@ -291,7 +394,8 @@ namespace Encog.Util.NetworkUtil
         /// You can use this method if you have already formated arrays and you want to create a double [][] ready for network.
         /// Example you could use this method to input the XOR example:
         /// A[0,0]   B[0,1]  C[1, 0]  D[1,1] would format them directly in the double [][] in one method call.
-        /// This could also be used in unsupersivsed learning.
+        /// 
+        /// This could also be used in unsupersivsed learning (or anywhere you need to make a jagged from multiple double arrays)
         /// </summary>
         /// <param name="Inputs">The inputs.</param>
         /// <returns></returns>
