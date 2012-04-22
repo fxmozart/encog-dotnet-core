@@ -6,7 +6,14 @@ namespace Encog.Util
 {
     public class SerializeRoundTrip
     {
-        public static Object RoundTrip(Object obj)
+        /// <summary>
+        ///  Round trip serializes to memory then de serializes.
+        /// </summary>
+        /// <param name="obj"> The object. </param>
+        /// <returns>
+        ///  .
+        /// </returns>
+        public static object RoundTrip(object obj)
         {
             // first serialize to memory
             var ms = new MemoryStream();
@@ -15,7 +22,7 @@ namespace Encog.Util
 
             // now reload
             ms.Seek(0, SeekOrigin.Begin);
-            Object result = b.Deserialize(ms);
+            object result = b.Deserialize(ms);
             return result;
         }
     }

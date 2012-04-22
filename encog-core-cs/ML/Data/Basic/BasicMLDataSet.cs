@@ -146,8 +146,7 @@ namespace Encog.ML.Data.Basic
         /// <summary>
         /// Copy whatever dataset type is specified into a memory dataset.
         /// </summary>
-        ///
-        /// <param name="set">The dataset to copy.</param>
+       /// <param name="set">The dataset to copy.</param>
         public BasicMLDataSet(IMLDataSet set)
         {
             _data = new List<IMLDataPair>();

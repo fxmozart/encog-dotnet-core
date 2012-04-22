@@ -55,7 +55,7 @@ namespace Encog.Util.Normalize
         public void TestDataSetSerial()
         {
             DataNormalization norm = Create();
-            norm = (DataNormalization) SerializeRoundTrip.RoundTrip(norm);
+            norm = (DataNormalization)SerializeRoundTrip.RoundTrip(norm);
             norm.Process();
             Check(norm);
         }

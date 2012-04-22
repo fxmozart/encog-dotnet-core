@@ -141,8 +141,8 @@ namespace Encog.Engine.Network.Train.Prop
         /// <param name="localRatio">The local ratio.</param>
         /// <param name="globalRatio">The global ratio.</param>
         /// <param name="segmentationRatio">The segmentation ratio.</param>
-        public OpenCLTrainingProfile(EncogCLDevice device, double localRatio,
-                int globalRatio, double segmentationRatio)
+        public OpenCLTrainingProfile(EncogCLDevice device, double localRatio = 1d,
+                int globalRatio = 1, double segmentationRatio = 1d)
             : base()
         {
             this.device = device;

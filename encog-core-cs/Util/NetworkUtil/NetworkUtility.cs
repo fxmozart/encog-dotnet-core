@@ -34,7 +34,7 @@ namespace Encog.Util.NetworkUtil
     /// </summary>
     public partial class NetworkUtility
     {
-       
+
 
         /// <summary>
         /// Saves the matrix to the desired file location.
@@ -88,7 +88,7 @@ namespace Encog.Util.NetworkUtil
 
             return matrix;
         }
-       
+
 
         /// <summary>
         /// Calculates the percents change from one number to the next.
@@ -148,7 +148,7 @@ namespace Encog.Util.NetworkUtil
             }
             return result.ToArray();
         }
-       
+
         /// <summary>
         /// Loads an IMLDataset training file in a given directory.
         /// </summary>
@@ -167,6 +167,26 @@ namespace Encog.Util.NetworkUtil
         }
 
 
+
+
+        /// <summary>
+        /// Loads an IMLDataset training file in a given directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        public static IMLDataSet LoadTraining(string file)
+        {
+            FileInfo networkFile = new FileInfo(file);
+            if (!networkFile.Exists)
+            {
+                return null;
+            }
+            IMLDataSet network = (IMLDataSet)EncogUtility.LoadEGB2Memory(networkFile);
+            return network;
+        }
+
+
         /// <summary>
         /// Saves the network to the specified directory with the specified parameter name.
         /// </summary>
@@ -176,6 +196,19 @@ namespace Encog.Util.NetworkUtil
         public static BasicNetwork SaveNetwork(string directory, string file, BasicNetwork anetwork)
         {
             FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
+            EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
+            return anetwork;
+        }
+
+
+        /// Saves the network to the specified directory with the specified parameter name.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="anetwork">The network to save..</param>
+        public static BasicNetwork SaveNetwork(string file, BasicNetwork anetwork)
+        {
+            FileInfo networkFile = new FileInfo(file);
             EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
             return anetwork;
         }
@@ -213,7 +246,24 @@ namespace Encog.Util.NetworkUtil
             var network = (BasicNetwork)EncogDirectoryPersistence.LoadObject(networkFile);
             return network;
         }
-
+        /// <summary>
+        /// Loads an basic network from the specified  file.
+        /// You must load the network like this Loadnetwork(@file);
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        public static BasicNetwork LoadNetwork(string file)
+        {
+            FileInfo networkFile = new FileInfo(file);
+            // network file
+            if (!networkFile.Exists)
+            {
+                Console.WriteLine(@"Can't read file: " + networkFile);
+                return null;
+            }
+            var network = (BasicNetwork)EncogDirectoryPersistence.LoadObject(networkFile);
+            return network;
+        }
         /// <summary>
         /// Loads an basic network from the specified directory and file.
         /// You must load the network like this Loadnetwork(@directory,@file);
@@ -242,6 +292,21 @@ namespace Encog.Util.NetworkUtil
         public static void SaveTraining(string directory, string file, IMLDataSet trainintoSave)
         {
             FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
+            //save our training file.
+            EncogUtility.SaveEGB(networkFile, trainintoSave);
+            return;
+        }
+
+
+        /// <summary>
+        /// Saves an IMLDataset to a file.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="trainintoSave">The traininto save.</param>
+        public static void SaveTraining(string file, IMLDataSet trainintoSave)
+        {
+            FileInfo networkFile = new FileInfo(file);
             //save our training file.
             EncogUtility.SaveEGB(networkFile, trainintoSave);
             return;
@@ -327,7 +392,7 @@ namespace Encog.Util.NetworkUtil
             return network;
         }
 
-       
+
 
 
         /// <summary>
@@ -336,7 +401,7 @@ namespace Encog.Util.NetworkUtil
         /// </summary>
         public static readonly Encog.Util.Arrayutil.NormalizeArray ArrayNormalizer = new Encog.Util.Arrayutil.NormalizeArray();
 
-        
+
         /// <summary>
         /// Normalizes an array.
         /// </summary>
@@ -356,9 +421,9 @@ namespace Encog.Util.NetworkUtil
         /// <returns>
         /// a normalized array of doubles
         /// </returns>
-        public static double[] NormalizeThisArray(double[] inputArray,int low,int high)
+        public static double[] NormalizeThisArray(double[] inputArray, int low, int high)
         {
-            return ArrayNormalizer.Process(inputArray,low,high);
+            return ArrayNormalizer.Process(inputArray, low, high);
         }
 
 
@@ -370,11 +435,11 @@ namespace Encog.Util.NetworkUtil
         /// <param name="hi">The hi.</param>
         /// <param name="Arrays">The arrays.</param>
         /// <returns></returns>
-        public static double [] NormalizeArray(double lo, double hi, double [] Arrays)
+        public static double[] NormalizeArray(double lo, double hi, double[] Arrays)
         {
             var norm = new NormalizeArray { NormalizedHigh = hi, NormalizedLow = lo };
-         return  norm.Process(Arrays);
-           
+            return norm.Process(Arrays);
+
         }
         /// <summary>
         /// Denormalizes the double.
@@ -417,13 +482,13 @@ namespace Encog.Util.NetworkUtil
         /// <param name="first">The first double.</param>
         /// <param name="second">The second double.</param>
         /// <returns>return the absolute percentage difference between two numbers.</returns>
-        public static double AveragePercents (double first,double second)
+        public static double AveragePercents(double first, double second)
         {
             //double diffs = (first - second);
             //double result = (first + second)/2;
             //return 1-((result/diffs)*0.01);
 
-           return  Math.Abs(first - second) / (first + second) * 100;
+            return Math.Abs(first - second) / (first + second) * 100;
 
         }
 

@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncogCandleStickExample", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncogOpenCLBenchmark", "EncogOpenCLBenchmark\EncogOpenCLBenchmark.csproj", "{760B8696-4A3E-4E93-9D66-46BA4C53A0F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClooTrainer", "ClooTrainer\ClooTrainer.csproj", "{91C252F0-579C-4EC8-B9D5-24407EB6DB07}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = encog-core-cs.vsmdi
@@ -117,6 +119,16 @@ Global
 		{760B8696-4A3E-4E93-9D66-46BA4C53A0F3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{760B8696-4A3E-4E93-9D66-46BA4C53A0F3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{760B8696-4A3E-4E93-9D66-46BA4C53A0F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Debug|x86.ActiveCfg = Debug|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Debug|x86.Build.0 = Debug|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Release|Any CPU.ActiveCfg = Release|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Release|Mixed Platforms.Build.0 = Release|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Release|x86.ActiveCfg = Release|x86
+		{91C252F0-579C-4EC8-B9D5-24407EB6DB07}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
