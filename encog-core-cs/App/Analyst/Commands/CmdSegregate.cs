@@ -69,8 +69,8 @@ namespace Encog.App.Analyst.Commands
 
             FileInfo sourceFile = Script.ResolveFilename(sourceID);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning segregate");
-            EncogLogging.Log(EncogLogging.LevelDebug, "source file:" + sourceID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning segregate");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "source file:" + sourceID);
 
             // get formats
             CSVFormat format = Script.DetermineFormat();
@@ -87,7 +87,7 @@ namespace Encog.App.Analyst.Commands
                 // mark generated
                 Script.MarkGenerated(target.File);
                 EncogLogging.Log(
-                    EncogLogging.LevelDebug,
+                    EncogLogging.LogLevel.Debug,
                     "target file:" + target.File + ", Percent: "
                     + Format.FormatPercent(target.Percent));
             }

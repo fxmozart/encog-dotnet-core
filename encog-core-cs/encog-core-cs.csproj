@@ -47,6 +47,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -591,6 +592,7 @@
     <Compile Include="Plugin\IEncogPluginLogging1.cs" />
     <Compile Include="Plugin\IEncogPluginService1.cs" />
     <Compile Include="Plugin\EncogPluginBaseConst.cs" />
+    <Compile Include="Plugin\PluginEnums.cs" />
     <Compile Include="Plugin\SystemPlugin\SystemActivationPlugin.cs" />
     <Compile Include="Plugin\SystemPlugin\SystemLoggingPlugin.cs" />
     <Compile Include="Plugin\SystemPlugin\SystemMethodsPlugin.cs" />

@@ -37,6 +37,8 @@ using Encog.Util.File;
 
 namespace Encog.App.Analyst.Wizard
 {
+    using Encog.Util.Logging;
+
     /// <summary>
     /// The Encog Analyst Wizard can be used to create Encog Analyst script files
     /// from a CSV file. This class is typically used by the Encog Workbench, but it
@@ -507,7 +509,7 @@ namespace Encog.App.Analyst.Wizard
         private void DetermineTargetField()
         {
             IList<AnalystField> fields = _script.Normalize.NormalizedFields;
-
+            Encog.EncogFramework.Instance.LoggingPlugin.LogDebug("Trying to determine target field current target field name :"+TargetFieldName);
             if (string.IsNullOrEmpty(TargetFieldName))
             {
                 bool success = false;
@@ -629,7 +631,7 @@ namespace Encog.App.Analyst.Wizard
 
 
             // generate the inputs foreach the new list
-            foreach (AnalystField field  in  oldList)
+            foreach (AnalystField field in oldList)
             {
                 if (!field.Ignored)
                 {
@@ -637,7 +639,7 @@ namespace Encog.App.Analyst.Wizard
                     {
                         for (int i = 0; i < _lagWindowSize; i++)
                         {
-                            var newField = new AnalystField(field) {TimeSlice = -i, Output = false};
+                            var newField = new AnalystField(field) { TimeSlice = -i, Output = false };
                             newList.Add(newField);
                         }
                     }
@@ -650,7 +652,7 @@ namespace Encog.App.Analyst.Wizard
 
 
             // generate the outputs foreach the new list
-            foreach (AnalystField field  in  oldList)
+            foreach (AnalystField field in oldList)
             {
                 if (!field.Ignored)
                 {
@@ -658,7 +660,7 @@ namespace Encog.App.Analyst.Wizard
                     {
                         for (int i = 1; i <= _leadWindowSize; i++)
                         {
-                            var newField = new AnalystField(field) {TimeSlice = i};
+                            var newField = new AnalystField(field) { TimeSlice = i };
                             newList.Add(newField);
                         }
                     }
@@ -667,7 +669,7 @@ namespace Encog.App.Analyst.Wizard
 
 
             // generate the ignores foreach the new list
-            foreach (AnalystField field  in  oldList)
+            foreach (AnalystField field in oldList)
             {
                 if (field.Ignored)
                 {
@@ -690,7 +692,7 @@ namespace Encog.App.Analyst.Wizard
         /// <param name="inputColumns">The input column count.</param>
         private void GenerateFeedForward(int inputColumns)
         {
-            var hidden = (int) ((inputColumns)*1.5d);
+            var hidden = (int)((inputColumns) * 1.5d);
             _script.Properties.SetProperty(
                 ScriptProperties.MlConfigType,
                 MLMethodFactory.TypeFeedforward);
@@ -763,7 +765,7 @@ namespace Encog.App.Analyst.Wizard
                     a.Append("[");
                     // handle ranges
                     double size = Math.Abs(field.Max - field.Min);
-                    double per = size/segment;
+                    double per = size / segment;
 
                     if (size < EncogFramework.DefaultDoubleEqual)
                     {
@@ -782,7 +784,7 @@ namespace Encog.App.Analyst.Wizard
                             {
                                 a.Append(",");
                             }
-                            double low = field.Min + (per*i);
+                            double low = field.Min + (per * i);
                             double hi = i == (segment - 1)
                                             ? (field.Max)
                                             : (low + per);
@@ -989,14 +991,15 @@ namespace Encog.App.Analyst.Wizard
         ///
         private void GenerateNormalizedFields()
         {
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Trace, "Inside Generating Normalize Fields.");
             IList<AnalystField> norm = _script.Normalize.NormalizedFields;
             norm.Clear();
             DataField[] dataFields = _script.Fields;
-
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Trace, "Fields to normalize :" + dataFields.Length);
             for (int i = 0; i < _script.Fields.Length; i++)
             {
                 DataField f = dataFields[i];
-
+                Encog.EncogFramework.Instance.LoggingPlugin.LogTrace("Got dataField :" + f.Name + " " + f.Class);
                 NormalizationAction action;
                 bool isLast = i == _script.Fields.Length - 1;
 
@@ -1015,7 +1018,7 @@ namespace Encog.App.Analyst.Wizard
                                 NormalizationAction.PassThrough, 0, 0);
                     }
                     norm.Add(af);
-                } 
+                }
                 else if ((f.Integer || f.Real) && !f.Class)
                 {
                     action = NormalizationAction.Normalize;
@@ -1063,7 +1066,7 @@ namespace Encog.App.Analyst.Wizard
         /// <param name="outputColumns">The number of output columns.</param>
         private void GenerateRBF(int inputColumns, int outputColumns)
         {
-            var hidden = (int) ((inputColumns)*1.5d);
+            var hidden = (int)((inputColumns) * 1.5d);
             _script.Properties.SetProperty(
                 ScriptProperties.MlConfigType,
                 MLMethodFactory.TypeRbfnetwork);
@@ -1339,33 +1342,50 @@ namespace Encog.App.Analyst.Wizard
         /// </summary>
         ///
         /// <param name="analyzeFile">The file to analyze.</param>
-        /// <param name="b">True if there are headers.</param>
+        /// <param name="useheader">True if there are headers.</param>
         /// <param name="format">The file format.</param>
-        public void Wizard(FileInfo analyzeFile, bool b,
+        public void Wizard(FileInfo analyzeFile, bool useheader,
                            AnalystFileFormat format)
         {
+
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(
+                EncogLogging.LogLevel.Info,
+                string.Format(
+                    "Starting analyst Wizard with analyst file:{0} Headers :{1} Analyst format : {2}",
+                    analyzeFile.Name,
+                    useheader,
+                    format));
+
+
+
             _script.BasePath = analyzeFile.DirectoryName;
             _format = format;
             _script.Properties.SetProperty(
-                ScriptProperties.HeaderDatasourceSourceHeaders, b);
+                ScriptProperties.HeaderDatasourceSourceHeaders, useheader);
             _script.Properties.SetProperty(
                 ScriptProperties.HeaderDatasourceRawFile, analyzeFile);
 
             _timeSeries = ((_lagWindowSize > 0) || (_leadWindowSize > 0));
 
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Determining Classification");
             DetermineClassification();
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating filenames");
             GenerateFilenames(analyzeFile);
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating settings");
             GenerateSettings();
-            _analyst.Analyze(analyzeFile, b, format);
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Starting analysis");
+            _analyst.Analyze(analyzeFile, useheader, format);
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating normalized fields");
             GenerateNormalizedFields();
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating Segregate");
             GenerateSegregate();
-
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating finalization.");
             GenerateGenerate();
-
+            Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating all tasks");
             GenerateTasks();
-            if (_timeSeries && (_lagWindowSize > 0)
-                && (_leadWindowSize > 0))
+            if (_timeSeries && (_lagWindowSize > 0) && (_leadWindowSize > 0))
             {
+                Encog.EncogFramework.Instance.LoggingPlugin.Log(EncogLogging.LogLevel.Debug, "Next:Generating Timeslices");
                 ExpandTimeSlices();
             }
         }
@@ -1377,10 +1397,10 @@ namespace Encog.App.Analyst.Wizard
         /// <param name="url">The URL to analyze.</param>
         /// <param name="saveFile">The save file.</param>
         /// <param name="analyzeFile">The Encog analyst file.</param>
-        /// <param name="b">True if there are headers.</param>
+        /// <param name="hasheaders">True if there are headers.</param>
         /// <param name="format">The file format.</param>
         public void Wizard(Uri url, FileInfo saveFile,
-                           FileInfo analyzeFile, bool b,
+                           FileInfo analyzeFile, bool hasheaders,
                            AnalystFileFormat format)
         {
             _script.BasePath = saveFile.DirectoryName;
@@ -1389,7 +1409,7 @@ namespace Encog.App.Analyst.Wizard
             _script.Properties.SetProperty(
                 ScriptProperties.HeaderDatasourceSourceFile, url);
             _script.Properties.SetProperty(
-                ScriptProperties.HeaderDatasourceSourceHeaders, b);
+                ScriptProperties.HeaderDatasourceSourceHeaders, hasheaders);
             _script.Properties.SetProperty(
                 ScriptProperties.HeaderDatasourceRawFile, analyzeFile);
 
@@ -1397,7 +1417,7 @@ namespace Encog.App.Analyst.Wizard
             GenerateSettings();
             _analyst.Download();
 
-            Wizard(analyzeFile, b, format);
+            Wizard(analyzeFile, hasheaders, format);
         }
     }
 }

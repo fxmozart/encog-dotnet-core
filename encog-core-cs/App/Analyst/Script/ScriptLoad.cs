@@ -88,7 +88,6 @@ namespace Encog.App.Analyst.Script
         /// <summary>
         /// Handle loading the data classes.
         /// </summary>
-        ///
         /// <param name="section">The section being loaded.</param>
         private void HandleDataClasses(EncogFileSection section)
         {
@@ -96,7 +95,7 @@ namespace Encog.App.Analyst.Script
 
             bool first = true;
 
-            foreach (String line  in  section.Lines)
+            foreach (String line in section.Lines)
             {
                 if (!first)
                 {
@@ -141,7 +140,7 @@ namespace Encog.App.Analyst.Script
             }
 
 
-            foreach (DataField field  in  _script.Fields)
+            foreach (DataField field in _script.Fields)
             {
                 if (field.Class)
                 {
@@ -169,7 +168,7 @@ namespace Encog.App.Analyst.Script
             IList<DataField> dfs = new List<DataField>();
             bool first = true;
 
-            foreach (String line  in  section.Lines)
+            foreach (String line in section.Lines)
             {
                 if (!first)
                 {
@@ -222,7 +221,7 @@ namespace Encog.App.Analyst.Script
             _script.Properties.ClearFilenames();
 
 
-            foreach (var  e  in  prop)
+            foreach (var e in prop)
             {
                 _script.Properties.SetFilename(e.Key, e.Value);
             }
@@ -238,7 +237,7 @@ namespace Encog.App.Analyst.Script
             _script.Normalize.NormalizedFields.Clear();
             bool first = true;
 
-            foreach (String line  in  section.Lines)
+            foreach (String line in section.Lines)
             {
                 if (!first)
                 {
@@ -281,7 +280,7 @@ namespace Encog.App.Analyst.Script
                         throw new AnalystError("Unknown field type:" + action);
                     }
 
-                    var nf = new AnalystField(name, des, high, low) {TimeSlice = timeSlice, Output = isOutput};
+                    var nf = new AnalystField(name, des, high, low) { TimeSlice = timeSlice, Output = isOutput };
                     _script.Normalize.NormalizedFields.Add(nf);
                 }
                 else
@@ -301,7 +300,7 @@ namespace Encog.App.Analyst.Script
             IList<AnalystSegregateTarget> nfs = new List<AnalystSegregateTarget>();
             bool first = true;
 
-            foreach (String line  in  section.Lines)
+            foreach (String line in section.Lines)
             {
                 if (!first)
                 {
@@ -337,7 +336,7 @@ namespace Encog.App.Analyst.Script
         {
             var task = new AnalystTask(section.SubSectionName);
 
-            foreach (String line  in  section.Lines)
+            foreach (String line in section.Lines)
             {
                 task.Lines.Add(line);
             }
@@ -385,7 +384,7 @@ namespace Encog.App.Analyst.Script
             IDictionary<String, String> prop = section.ParseParams();
 
 
-            foreach (String name  in  prop.Keys)
+            foreach (String name in prop.Keys)
             {
                 String key = section.SectionName.ToUpper() + ":"
                              + section.SubSectionName.ToUpper() + "_" + name;

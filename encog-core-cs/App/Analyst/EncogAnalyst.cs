@@ -305,11 +305,11 @@ namespace Encog.App.Analyst
                 }
             }
 
-            if( Method is BayesianNetwork ) 
+            if (Method is BayesianNetwork)
             {
-			    result++;
-		    }
-		
+                result++;
+            }
+
             return result;
         }
 
@@ -492,7 +492,7 @@ namespace Encog.App.Analyst
                                         lastUpdate = 0;
                                     }
                                     lastUpdate++;
-                                } while (length > 0);                                
+                                } while (length > 0);
                             }
                         }
                         tempFile.Delete();
@@ -524,7 +524,7 @@ namespace Encog.App.Analyst
 
             foreach (String line in task.Lines)
             {
-                EncogLogging.Log(EncogLogging.LevelDebug, "Execute analyst line: "
+                EncogLogging.Log(EncogLogging.LogLevel.Debug, "Execute analyst line: "
                                                            + line);
                 ReportCommandBegin(total, current, line);
 
@@ -542,7 +542,7 @@ namespace Encog.App.Analyst
                 else
                 {
                     command = line2.ToUpper();
-                    args = "";
+                    args = string.Empty;
                 }
 
                 Cmd cmd = _commands[command];
@@ -574,7 +574,7 @@ namespace Encog.App.Analyst
         /// <param name="name">The name of the task to execute.</param>
         public void ExecuteTask(String name)
         {
-            EncogLogging.Log(EncogLogging.LevelInfo, "Analyst execute task:"
+            EncogLogging.Log(EncogLogging.LogLevel.Info, "Analyst execute task:"
                                                       + name);
             AnalystTask task = _script.GetTask(name);
             if (task == null)
@@ -840,19 +840,19 @@ namespace Encog.App.Analyst
         /// Determine the total number of columns.  
         /// </summary>
         /// <returns>The number of tes</returns>
-        public int DetermineTotalColumns() 
+        public int DetermineTotalColumns()
         {
-		    int result = 0;
+            int result = 0;
 
-		    foreach (AnalystField field in _script.Normalize.NormalizedFields ) 
+            foreach (AnalystField field in _script.Normalize.NormalizedFields)
             {
-			    if (!field.Ignored ) 
+                if (!field.Ignored)
                 {
-				    result += field.ColumnsNeeded;
-			    }
-		    }
-		    return result;
-	    }
+                    result += field.ColumnsNeeded;
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// Determine the total input field count, minus ignored fields.

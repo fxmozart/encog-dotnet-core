@@ -39,7 +39,7 @@ namespace Encog.Plugin.SystemPlugin
         /// The current level.
         /// </summary>
         ///
-        private int currentLevel;
+        private EncogLogging.LogLevel currentLevel;
 
         /// <summary>
         /// True if we are logging to the console.
@@ -52,7 +52,7 @@ namespace Encog.Plugin.SystemPlugin
         /// </summary>
         public SystemLoggingPlugin()
         {
-            currentLevel = EncogLogging.LevelDisable;
+            currentLevel = EncogLogging.LogLevel.Warn;
             logConsole = false;
         }
 
@@ -103,7 +103,7 @@ namespace Encog.Plugin.SystemPlugin
         /// <summary>
         /// Set the logging level.
         /// </summary>
-        public int LogLevel
+        public EncogLogging.LogLevel LogLevel
         {
             get { return currentLevel; }
             set { currentLevel = value; }
@@ -131,16 +131,20 @@ namespace Encog.Plugin.SystemPlugin
         /// <value>Returns the service type for this plugin. This plugin provides
         /// the system calculation for layers and gradients. Therefore, this
         /// plugin returns SERVICE_TYPE_CALCULATION.</value>
-        public int PluginServiceType
+        public ServiceType PluginServiceType
         {
-            get { return EncogPluginBaseConst.SERVICE_TYPE_LOGGING; }
+            // get { return EncogPluginBaseConst.SERVICE_TYPE_LOGGING; }
+            get { return ServiceType.LOGGING; }
         }
 
 
         /// <value>This is a type-1 plugin.</value>
-        public int PluginType
+        public EncogPluginType PluginType
         {
-            get { return 1; }
+            get
+            {
+                return EncogPluginType.Logging;
+            }
         }
 
 
@@ -150,30 +154,54 @@ namespace Encog.Plugin.SystemPlugin
         ///
         /// <param name="level">The logging level.</param>
         /// <param name="message">The logging message.</param>
-        public void Log(int level, String message)
+        public void Log(EncogLogging.LogLevel level, String message)
         {
-            if (currentLevel <= level)
+            if (level.CompareTo(currentLevel) > 0)
             {
                 DateTime now = DateTime.Now;
                 var line = new StringBuilder();
                 line.Append(now.ToString());
                 line.Append(" [");
+                //switch (level)
+                //{
+                //    case EncogLogLevel.Critical:
+                //        line.Append("CRITICAL");
+                //        break;
+                //    case EncogLogging.LevelError:
+                //        line.Append("ERROR");
+                //        break;
+                //    case EncogLogging.LogLevel.Info:
+                //        line.Append("INFO");
+                //        break;
+                //    case EncogLogging.LogLevel.Debug:
+                //        line.Append("DEBUG");
+                //        break;
+                //    default:
+                //        line.Append("?");
+                //        break;
+                //}
                 switch (level)
                 {
-                    case EncogLogging.LevelCritical:
-                        line.Append("CRITICAL");
+                    case EncogLogging.LogLevel.None:
+                        //Lets do nothing as we will not log.
                         break;
-                    case EncogLogging.LevelError:
-                        line.Append("ERROR");
+                    case EncogLogging.LogLevel.Trace:
+                        line.Append("TRACE");
                         break;
-                    case EncogLogging.LevelInfo:
-                        line.Append("INFO");
-                        break;
-                    case EncogLogging.LevelDebug:
+                    case EncogLogging.LogLevel.Debug:
                         line.Append("DEBUG");
                         break;
-                    default:
-                        line.Append("?");
+                    case EncogLogging.LogLevel.Info:
+                        line.Append("INFO");
+                        break;
+                    case EncogLogging.LogLevel.Warn:
+                        line.Append("WARN");
+                        break;
+                    case EncogLogging.LogLevel.Error:
+                        line.Append("ERROR");
+                        break;
+                    case EncogLogging.LogLevel.Critical:
+                        line.Append("CRITICAL");
                         break;
                 }
                 line.Append("][");
@@ -183,23 +211,49 @@ namespace Encog.Plugin.SystemPlugin
 
                 if (logConsole)
                 {
-                    if (currentLevel > EncogLogging.LevelError)
-                    {
+                    if (currentLevel == EncogLogging.LogLevel.Error)
                         Console.Error.WriteLine(line.ToString());
-                    }
+                    //if (currentLevel.CompareTo(EncogLogging.LogLevel.Error) > 0)
+                    //{
+                    //    Console.Error.WriteLine(line.ToString());
+                    //}
                     else
                     {
                         Console.Out.WriteLine(line.ToString());
                     }
-				}
-				System.Diagnostics.Debug.WriteLine(line);
-			}
+                }
+                System.Diagnostics.Debug.WriteLine(line);
+            }
+        }
+
+        /// <summary>
+        ///  Logs a trace trace message
+        /// </summary>
+        /// <param name="message"> The message to log. </param>
+        public void LogTrace(string message)
+        {
+            Log(EncogLogging.LogLevel.Trace, message);
+        }
+
+        /// <summary>
+        ///  Logs a debug message
+        /// </summary>
+        /// <param name="message"> The message to log. </param>
+        public void LogDebug(string message)
+        {
+            Log(EncogLogging.LogLevel.Debug, message);
         }
 
         /// <inheritdoc/>
-        public void Log(int level, Exception t)
+        public void Log(EncogLogging.LogLevel level, Exception t)
         {
             Log(level, t.ToString());
+        }
+
+        /// <inheritdoc/>
+        public void Log(string message)
+        {
+            Log(EncogLogging.LogLevel.Info, message);
         }
 
         #endregion
@@ -212,7 +266,8 @@ namespace Encog.Plugin.SystemPlugin
         {
             StopLogging();
             logConsole = true;
-            LogLevel = EncogLogging.LevelDebug;
+            LogLevel = EncogLogging.LogLevel.Info;
+
         }
 
         /// <summary>

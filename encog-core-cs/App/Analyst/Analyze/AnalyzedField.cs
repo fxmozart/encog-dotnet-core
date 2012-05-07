@@ -107,7 +107,7 @@ namespace Encog.App.Analyst.Analyze
             bool accountedFor = false;
             string str = v.Trim();
 
-            if (str.Trim().Length == 0 || str.Equals("?"))
+            if (str.Trim().Length == 0 || str.Equals("?") || str.Equals(string.Empty))
             {
                 Complete = false;
                 return;
@@ -201,7 +201,7 @@ namespace Encog.App.Analyst.Analyze
 
             if (Real || Integer)
             {
-                if (!str.Equals("") && !str.Equals("?"))
+                if (!str.Equals(string.Empty) && !str.Equals("?"))
                 {
                     double d = this._script.DetermineFormat().Parse(str) - Mean;
                     _devTotal += d * d;
@@ -257,7 +257,7 @@ namespace Encog.App.Analyst.Analyze
                              };
 
             // if max and min are the same, we are dealing with a zero-sized range,
-            // which will cause other issues.  This is caused by ever number in the
+            // which will cause other issues.  This is caused by every number in the
             // column having exactly (or nearly exactly) the same value.  Provide a
             // small range around that value so that every value in this column normalizes
             // to the midpoint of the desired normalization range, typically 0 or 0.5.

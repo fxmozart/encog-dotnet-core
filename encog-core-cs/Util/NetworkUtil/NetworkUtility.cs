@@ -1,25 +1,3 @@
-//
-// Encog(tm) Core v3.1 - .Net Version
-// http://www.heatonresearch.com/encog/
-//
-// Copyright 2008-2012 Heaton Research, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//  http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//   
-// For more information on Heaton Research copyrights, licenses 
-// and trademarks visit:
-// http://www.heatonresearch.com/copyright
-//
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,23 +18,105 @@ using Encog.Neural.Networks.Training;
 using Encog.Neural.Pattern;
 using Encog.Persist;
 using Encog.Util.Arrayutil;
-using Encog.Util.CSV;
 using Encog.Util.File;
 using Encog.Util.Normalize;
-using Encog.Util.Normalize.Input;
-using Encog.Util.Normalize.Output;
-using Encog.Util.Normalize.Target;
 using Encog.Util.Simple;
 using Convert = System.Convert;
 
 namespace Encog.Util.NetworkUtil
 {
+    using System.Collections.ObjectModel;
+    using System.Globalization;
+    using System.Reflection;
+
+    using Encog.App.Analyst.Script.Normalize;
+
+    public static class ArraysToCSV
+    {
+        /// <summary>
+        ///  Gets a string formated as a string with separator , ready to write to a file as a csv.
+        /// </summary>
+        /// <param name="p"> The List&lt;double&gt; to process. </param>
+        /// <param name="separator"> The separator. </param>
+        /// <returns>
+        ///  The csv.
+        /// </returns>
+        public static string GetCSV(List<double> p, char separator)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (double item in p)
+            {
+                sb.Append(item + separator);
+
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        ///  Converts this object to a csv.
+        /// </summary>
+        /// <param name="p"> The List&lt;double&gt; to process. </param>
+        /// <param name="separator"> The separator. </param>
+        /// <returns>
+        ///  The given data converted to a string.
+        /// </returns>
+        public static string ToCSV(List<string> p, char separator)
+        {
+            string csvString = p.Aggregate((csvSoFar, author) => csvSoFar + separator + author);
+            return csvString;
+        }
+
+        /// <summary>
+        ///  Gets a string formated as a string with separator , ready to write to a file as a csv.
+        /// </summary>
+        /// <param name="p"> The List&lt;double&gt; to process. </param>
+        /// <param name="separator"> The separator. </param>
+        /// <returns>
+        ///  The csv.
+        /// </returns>
+        public static string GetCSV(List<int> p, char separator)
+        {
+            string joined = string.Join(separator.ToString(CultureInfo.InvariantCulture), p.Cast<string>().ToArray());
+            return joined;
+        }
+
+        /// <summary>
+        ///  Gets a string formated as a string with separator , ready to write to a file as a csv.
+        /// </summary>
+        /// <param name="p"> The List&lt;double&gt; to process. </param>
+        /// <param name="separator"> The separator. </param>
+        /// <returns>
+        ///  The csv.
+        /// </returns>
+        public static string GetCSV(List<string> p, char separator)
+        {
+            string joined = string.Join(separator.ToString(CultureInfo.InvariantCulture), p.ToArray());
+            return joined;
+        }
+    }
+
     /// <summary>
     /// A class with many helpers.
     /// </summary>
-    public partial class NetworkUtility
+    public class NetworkUtility
     {
 
+        /// <summary>
+        ///  Gets the pathname of the current assembly directory.
+        /// </summary>
+        /// <value>
+        ///  The pathname of the assembly directory.
+        /// </value>
+        static public string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
+        }
 
         /// <summary>
         /// Saves the matrix to the desired file location.
@@ -148,6 +208,10 @@ namespace Encog.Util.NetworkUtil
             return results.ToArray();
         }
 
+
+
+
+
         /// <summary>
         /// Calculates the percent changes in a double serie.
         /// Emulates how the temporal datasets are normalizing.
@@ -179,7 +243,7 @@ namespace Encog.Util.NetworkUtil
         /// <returns></returns>
         public static IMLDataSet LoadTraining(string directory, string file)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(@directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             if (!networkFile.Exists)
             {
                 return null;
@@ -189,15 +253,17 @@ namespace Encog.Util.NetworkUtil
         }
 
 
+
+
         /// <summary>
         /// Loads an IMLDataset training file in a given directory.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <param name="file">The file.</param>
-        /// <returns>an imldataset ready to use.</returns>
+        /// <returns></returns>
         public static IMLDataSet LoadTraining(string file)
         {
-            FileInfo networkFile = new FileInfo(@file);
+            FileInfo networkFile = new FileInfo(file);
             if (!networkFile.Exists)
             {
                 return null;
@@ -215,12 +281,12 @@ namespace Encog.Util.NetworkUtil
         /// <param name="anetwork">The network to save..</param>
         public static BasicNetwork SaveNetwork(string directory, string file, BasicNetwork anetwork)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
             return anetwork;
         }
 
-        /// <summary>
+
         /// Saves the network to the specified directory with the specified parameter name.
         /// </summary>
         /// <param name="directory">The directory.</param>
@@ -228,7 +294,7 @@ namespace Encog.Util.NetworkUtil
         /// <param name="anetwork">The network to save..</param>
         public static BasicNetwork SaveNetwork(string file, BasicNetwork anetwork)
         {
-            FileInfo networkFile = new FileInfo(@file);
+            FileInfo networkFile = new FileInfo(file);
             EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
             return anetwork;
         }
@@ -242,35 +308,21 @@ namespace Encog.Util.NetworkUtil
         /// <param name="anetwork">The network to save..</param>
         public static SupportVectorMachine SaveNetwork(string directory, string file, SupportVectorMachine anetwork)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), @file);
-            EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
-            return anetwork;
-        }
-
-        /// <summary>
-        /// Saves the network to the specified directory with the specified parameter name.
-        /// This version saves super machine to file.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <param name="file">The file.</param>
-        /// <param name="anetwork">The network to save..</param>
-        public static SupportVectorMachine SaveNetwork(string file, SupportVectorMachine anetwork)
-        {
-            FileInfo networkFile = new FileInfo(@file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             EncogDirectoryPersistence.SaveObject(networkFile, anetwork);
             return anetwork;
         }
 
         /// <summary>
         /// Loads an basic network from the specified directory and file.
-        /// You must load the network like this Loadnetwork(directory,file);
+        /// You must load the network like this Loadnetwork(@directory,@file);
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <param name="file">The file.</param>
         /// <returns></returns>
         public static BasicNetwork LoadNetwork(string directory, string file)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(@directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             // network file
             if (!networkFile.Exists)
             {
@@ -280,17 +332,15 @@ namespace Encog.Util.NetworkUtil
             var network = (BasicNetwork)EncogDirectoryPersistence.LoadObject(networkFile);
             return network;
         }
-
         /// <summary>
-        /// Loads an basic network from the specified directory and file.
-        /// You must load the network like this Loadnetwork(file);
+        /// Loads an basic network from the specified  file.
+        /// You must load the network like this Loadnetwork(@file);
         /// </summary>
-        /// <param name="directory">The directory.</param>
         /// <param name="file">The file.</param>
         /// <returns></returns>
         public static BasicNetwork LoadNetwork(string file)
         {
-            FileInfo networkFile = new FileInfo(@file);
+            FileInfo networkFile = new FileInfo(file);
             // network file
             if (!networkFile.Exists)
             {
@@ -300,20 +350,16 @@ namespace Encog.Util.NetworkUtil
             var network = (BasicNetwork)EncogDirectoryPersistence.LoadObject(networkFile);
             return network;
         }
-
-
-
-
         /// <summary>
         /// Loads an basic network from the specified directory and file.
-        /// You must load the network like this Loadnetwork(directory,file);
+        /// You must load the network like this Loadnetwork(@directory,@file);
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <param name="file">The file.</param>
         /// <returns></returns>
         public static SupportVectorMachine LoadNetwork(string directory, string file, string net)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(@directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             // network file
             if (!networkFile.Exists)
             {
@@ -331,20 +377,22 @@ namespace Encog.Util.NetworkUtil
         /// <param name="trainintoSave">The traininto save.</param>
         public static void SaveTraining(string directory, string file, IMLDataSet trainintoSave)
         {
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(@directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             //save our training file.
             EncogUtility.SaveEGB(networkFile, trainintoSave);
             return;
         }
 
+
         /// <summary>
         /// Saves an IMLDataset to a file.
         /// </summary>
+        /// <param name="directory">The directory.</param>
         /// <param name="file">The file.</param>
         /// <param name="trainintoSave">The traininto save.</param>
         public static void SaveTraining(string file, IMLDataSet trainintoSave)
         {
-            FileInfo networkFile = new FileInfo(@file);
+            FileInfo networkFile = new FileInfo(file);
             //save our training file.
             EncogUtility.SaveEGB(networkFile, trainintoSave);
             return;
@@ -430,14 +478,18 @@ namespace Encog.Util.NetworkUtil
             return network;
         }
 
+
+
+
         /// <summary>
         /// Normalizes arrays.
         /// You can retrieve the array normalizer stats throughout the program's life without having to instantiate a new normalizer.
         /// </summary>
-        public static readonly NormalizeArray ArrayNormalizer = new NormalizeArray();
+        public static readonly Encog.Util.Arrayutil.NormalizeArray ArrayNormalizer = new Encog.Util.Arrayutil.NormalizeArray();
+
 
         /// <summary>
-        /// Normalizes an array , and you can retrieve the normalizedArray by ArrayNormalizer object), this lets you do ArrayNormalizer.Stats.Denormalize(2);
+        /// Normalizes an array.
         /// </summary>
         /// <param name="inputArray">The input array.</param>
         /// <returns>a normalized array of doubles</returns>
@@ -473,22 +525,8 @@ namespace Encog.Util.NetworkUtil
         {
             var norm = new NormalizeArray { NormalizedHigh = hi, NormalizedLow = lo };
             return norm.Process(Arrays);
+
         }
-
-
-
-        /// <summary>
-        /// Normalizes an array using Normalize Array (and not DataNormalization way : Faster).
-        /// The high and low are the standard -1,1.
-        /// </summary>
-        /// <param name="Arrays">The arrays.</param>
-        /// <returns>returns a tuple with the array in item1 and the normalization in item 2.</returns>
-        public static Tuple<double[], NormalizeArray> NormalizeArray(double[] Arrays)
-        {
-            var norm = new NormalizeArray();
-            return new Tuple<double[], NormalizeArray>(norm.Process(Arrays), norm);
-        }
-
         /// <summary>
         /// Denormalizes the double.
         /// </summary>
@@ -508,7 +546,7 @@ namespace Encog.Util.NetworkUtil
         public static DataNormalization LoadNormalization(string directory, string file)
         {
             DataNormalization norm = null;
-            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(@directory), @file);
+            FileInfo networkFile = FileUtil.CombinePath(new FileInfo(directory), file);
             if (networkFile.Exists)
             {
                 norm = (DataNormalization)SerializeObject.Load(networkFile.FullName);
@@ -554,6 +592,17 @@ namespace Encog.Util.NetworkUtil
         }
 
 
+        /// <summary>
+        /// Saves a normalization to the specified folder with the specified name.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="normTosave">The norm tosave.</param>
+        public static DataNormalization LoadNormalization(string file)
+        {
+            DataNormalization norm = (DataNormalization)SerializeObject.Load(file);
+            return norm;
+        }
 
         /// <summary>
         /// Creates the elman network as a basicnetwork.

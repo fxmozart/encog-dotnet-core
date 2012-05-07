@@ -67,7 +67,7 @@ namespace Encog.App.Analyst
         public void Wizard(AnalystGoal goal, WizardMethodType methodType, bool headers)
         {
             EncogAnalyst.MaxIteration = MaxIterations;
-            var wiz = new AnalystWizard(EncogAnalyst) {Goal = goal, MethodType = methodType, EvidenceSegements = 3};
+            var wiz = new AnalystWizard(EncogAnalyst) { Goal = goal, MethodType = methodType, EvidenceSegements = 3 };
             wiz.Wizard(_rawFile, headers, FileFormat);
 
             EncogAnalyst.Save(_analystFile);
@@ -80,13 +80,13 @@ namespace Encog.App.Analyst
             double e;
 
             EncogAnalyst.AddAnalystListener(new ConsoleAnalystListener());
-            
+
             do
             {
                 EncogAnalyst.ExecuteTask("task-full");
                 e = CalculateError();
                 cycles++;
-				Debug.WriteLine(cycles + ": Error = " + e);
+                Debug.WriteLine(cycles + ": Error = " + e);
             } while (cycles <= MaxCycles && e > maxError);
 
             Assert.IsTrue(cycles <= MaxCycles, "Too many cycles to perform successful train.");
@@ -155,9 +155,9 @@ namespace Encog.App.Analyst
         }
 
         /**
-	 * Obtain the ML method.
-	 * @return The method.
-	 */
+     * Obtain the ML method.
+     * @return The method.
+     */
 
         public IMLMethod ObtainMethod()
         {
@@ -166,7 +166,7 @@ namespace Encog.App.Analyst
                 ScriptProperties.MlConfigMachineLearningFile);
             FileInfo resourceFile = EncogAnalyst.Script.ResolveFilename(resourceID);
 
-            var method = (IMLMethod) EncogDirectoryPersistence
+            var method = (IMLMethod)EncogDirectoryPersistence
                                          .LoadObject(resourceFile);
 
             if (!(method is IMLMethod))
@@ -180,9 +180,9 @@ namespace Encog.App.Analyst
         }
 
         /**
-	 * Obtain the training set.
-	 * @return The training set.
-	 */
+     * Obtain the training set.
+     * @return The training set.
+     */
 
         private IMLDataSet ObtainTrainingSet()
         {
@@ -206,7 +206,7 @@ namespace Encog.App.Analyst
         {
             IMLMethod method = ObtainMethod();
             IMLDataSet data = ObtainTrainingSet();
-            return ((IMLError) method).CalculateError(data);
+            return ((IMLError)method).CalculateError(data);
         }
 
         public void DumpAnalystField(int i)

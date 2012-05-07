@@ -26,6 +26,8 @@ using Encog.Util.Logging;
 
 namespace Encog.Neural.Networks.Training.PNN
 {
+    using Encog.Plugin;
+
     /// <summary>
     /// This class determines optimal values for multiple sigmas in a PNN kernel.
     /// This is done using a CJ (conjugate gradient) method.
@@ -84,7 +86,7 @@ namespace Encog.Neural.Networks.Training.PNN
                     break;
                 }
 
-                EncogLogging.Log(EncogLogging.LevelInfo,
+                EncogLogging.Log(EncogLogging.LogLevel.Info,
                     "Beginning internal Iteration #" + iteration + ", currentError=" + fbest + ",target=" + maxError); 
 
                 // Check for convergence

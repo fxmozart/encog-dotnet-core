@@ -92,6 +92,7 @@ namespace Encog.Util.NetworkUtil
             var eq = new Equilateral(2011, -1, 1);
             return eq.Decode(year);
         }
+
         public double[] NormalizeYear(int hour, int MaxYear)
         {
             var eq = new Equilateral(MaxYear, -1, 1);

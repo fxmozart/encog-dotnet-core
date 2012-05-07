@@ -115,7 +115,6 @@ namespace Encog.Neural.Networks.Structure
         /// <summary>
         /// Determine the network size.
         /// </summary>
-        ///
         /// <param name="network">The network.</param>
         /// <returns>The size.</returns>
         public static int NetworkSize(IMLMethod network)

@@ -463,11 +463,10 @@ namespace Encog.Neural.Flat
             var errorCalculation = new ErrorCalculation();
 
             var actual = new double[_outputCount];
-			IMLDataPair pair;
 
             for (int i = 0; i < data.Count; i++)
             {
-                pair = data[i];
+                IMLDataPair pair = data[i];
                 Compute(pair.Input, actual);
                 errorCalculation.UpdateError(actual, pair.Ideal, pair.Significance);
             }

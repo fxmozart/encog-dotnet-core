@@ -205,7 +205,7 @@ namespace Encog.Cloud.Indicator.Server
                 list[0] = list[0].ToUpper();
             }
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Received Packet: " + line.ToString());
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Received Packet: " + line.ToString());
             return new IndicatorPacket(list);
 
         }

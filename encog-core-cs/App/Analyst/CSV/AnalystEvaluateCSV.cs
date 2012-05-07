@@ -117,11 +117,9 @@ namespace Encog.App.Analyst.CSV
                 if (ProduceOutputHeaders)
                 {
                     var line = new StringBuilder();
-
-
                     // handle provided fields, not all may be used, but all should
                     // be displayed
-                    foreach (String heading  in  InputHeadings)
+                    foreach (String heading in InputHeadings)
                     {
                         AppendSeparator(line, Format);
                         line.Append("\"");
@@ -131,7 +129,7 @@ namespace Encog.App.Analyst.CSV
 
 
                     // now add the output fields that will be generated
-                    foreach (AnalystField field  in  _analyst.Script.Normalize.NormalizedFields)
+                    foreach (AnalystField field in _analyst.Script.Normalize.NormalizedFields)
                     {
                         if (field.Output && !field.Ignored)
                         {
@@ -165,93 +163,82 @@ namespace Encog.App.Analyst.CSV
             var csv = new ReadCSV(InputFilename.ToString(),
                                   ExpectInputHeaders, Format);
 
-            IMLData output;
-
             foreach (AnalystField field in _analyst.Script.Normalize.NormalizedFields)
             {
                 field.Init();
-            } 
+            }
 
             int outputLength = _analyst.DetermineTotalInputFieldCount();
 
-            StreamWriter tw = PrepareOutputFile(outputFile);
-
-            ResetStatus();
-            while (csv.Next())
+            using (StreamWriter tw = PrepareOutputFile(outputFile))
             {
-                UpdateStatus(false);
-                var row = new LoadedRow(csv, _outputColumns);
-
-                double[] inputArray = AnalystNormalizeCSV.ExtractFields(_analyst,
-                                                                        _analystHeaders, csv, outputLength, true);
-                if (_series.TotalDepth > 1)
+                ResetStatus();
+                while (csv.Next())
                 {
-                    inputArray = _series.Process(inputArray);
-                }
-
-                if (inputArray != null)
-                {
-                    IMLData input = new BasicMLData(inputArray);
-
-                    // evaluation data
-                    if ((method is IMLClassification)
-                        && !(method is IMLRegression))
+                    UpdateStatus(false);
+                    var row = new LoadedRow(csv, _outputColumns);
+                    double[] inputArray = AnalystNormalizeCSV.ExtractFields(_analyst, _analystHeaders, csv, outputLength, true);
+                    if (_series.TotalDepth > 1)
                     {
-                        // classification only?
-						var tmp = new BasicMLData(1);
-                        tmp[0] = ((IMLClassification) method).Classify(input);
-						output = tmp;
+                        inputArray = _series.Process(inputArray);
                     }
-                    else
+                    if (inputArray != null)
                     {
-                        // regression
-                        output = ((IMLRegression) method).Compute(input);
-                    }
-
-                    // skip file data
-                    int index = _fileColumns;
-                    int outputIndex = 0;
-
-
-                    // display output
-                    foreach (AnalystField field  in  _analyst.Script.Normalize.NormalizedFields)
-                    {
-                        if (_analystHeaders.Find(field.Name) != -1)
+                        IMLData input = new BasicMLData(inputArray);
+                        // evaluation data
+                        IMLData output;
+                        if ((method is IMLClassification) && !(method is IMLRegression))
                         {
-                            if (field.Output)
+                            // classification only?
+                            var tmp = new BasicMLData(1);
+                            tmp[0] = ((IMLClassification)method).Classify(input);
+                            output = tmp;
+                        }
+                        else
+                        {
+                            // regression
+                            output = ((IMLRegression)method).Compute(input);
+                        }
+                        // skip file data
+                        int index = _fileColumns;
+                        int outputIndex = 0;
+                        // display output
+                        foreach (AnalystField field in _analyst.Script.Normalize.NormalizedFields)
+                        {
+                            if (_analystHeaders.Find(field.Name) != -1)
                             {
-                                if (field.Classify)
+                                if (field.Output)
                                 {
-                                    // classification
-                                    ClassItem cls = field.DetermineClass(
-                                        outputIndex, output);
-                                    outputIndex += field.ColumnsNeeded;
-                                    if (cls == null)
+                                    if (field.Classify)
                                     {
-                                        row.Data[index++] = "?Unknown?";
+                                        // classification
+                                        ClassItem cls = field.DetermineClass(outputIndex, output);
+                                        outputIndex += field.ColumnsNeeded;
+                                        if (cls == null)
+                                        {
+                                            row.Data[index++] = "?Unknown?";
+                                        }
+                                        else
+                                        {
+                                            row.Data[index++] = cls.Name;
+                                        }
                                     }
                                     else
                                     {
-                                        row.Data[index++] = cls.Name;
+                                        // regression
+                                        double n = output[outputIndex++];
+                                        n = field.DeNormalize(n);
+                                        row.Data[index++] = Format.Format(n, Precision);
                                     }
-                                }
-                                else
-                                {
-                                    // regression
-                                    double n = output[outputIndex++];
-                                    n = field.DeNormalize(n);
-                                    row.Data[index++] = Format
-                                        .Format(n, Precision);
                                 }
                             }
                         }
                     }
+                    WriteRow(tw, row);
                 }
-
-                WriteRow(tw, row);
+                ReportDone(false);
+                tw.Close();
             }
-            ReportDone(false);
-            tw.Close();
             csv.Close();
         }
     }

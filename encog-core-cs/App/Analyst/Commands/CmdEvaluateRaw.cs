@@ -72,9 +72,9 @@ namespace Encog.App.Analyst.Commands
             String outputID = Prop.GetPropertyString(
                 ScriptProperties.MlConfigOutputFile);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning evaluate raw");
-            EncogLogging.Log(EncogLogging.LevelDebug, "evaluate file:" + evalID);
-            EncogLogging.Log(EncogLogging.LevelDebug, "resource file:"
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning evaluate raw");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "evaluate file:" + evalID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "resource file:"
                                                        + resourceID);
 
             FileInfo evalFile = Script.ResolveFilename(evalID);

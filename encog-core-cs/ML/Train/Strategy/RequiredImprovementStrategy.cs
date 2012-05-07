@@ -158,7 +158,7 @@ namespace Encog.ML.Train.Strategy
                         _badCycleCount++;
                         if (_badCycleCount > _cycles)
                         {
-                            EncogLogging.Log(EncogLogging.LevelDebug,
+                            EncogLogging.Log(EncogLogging.LogLevel.Debug,
                                              "Failed to improve network, resetting.");
                             _method.Reset();
                             _badCycleCount = 0;

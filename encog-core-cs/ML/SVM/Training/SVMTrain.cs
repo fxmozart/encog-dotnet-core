@@ -248,7 +248,7 @@ namespace Encog.ML.SVM.Training
             _network.Params.C = _c;
             _network.Params.gamma = _gamma;
 
-            EncogLogging.Log(EncogLogging.LevelInfo, "Training with parameters C = " + _c + ", gamma = " + _gamma);
+            EncogLogging.Log(EncogLogging.LogLevel.Info, "Training with parameters C = " + _c + ", gamma = " + _gamma);
 
             if (_fold > 1)
             {

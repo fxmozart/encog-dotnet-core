@@ -43,7 +43,7 @@ namespace Encog.Neural.Networks.Training.Propagation
     ///
     public abstract class Propagation : BasicTraining, ITrain, IMultiThreadable
     {
-                /// <summary>
+        /// <summary>
         /// The network in indexable form.
         /// </summary>
         ///
@@ -135,7 +135,8 @@ namespace Encog.Neural.Networks.Training.Propagation
         ///
         /// <param name="network">The network.</param>
         /// <param name="training">The training set.</param>
-        protected Propagation(IContainsFlat network, IMLDataSet training) : base(TrainingImplementationType.Iterative)
+        protected Propagation(IContainsFlat network, IMLDataSet training)
+            : base(TrainingImplementationType.Iterative)
         {
             _network = network;
             _flat = network.Flat;
@@ -189,6 +190,7 @@ namespace Encog.Neural.Networks.Training.Propagation
         {
             try
             {
+                //  Encog.EncogFramework.Instance.LoggingPlugin.LogTrace("Starting Preiterations for Propagation..");
                 PreIteration();
 
                 RollIteration();
@@ -207,8 +209,7 @@ namespace Encog.Neural.Networks.Training.Propagation
 
                 foreach (GradientWorker worker in _workers)
                 {
-                    EngineArray.ArrayCopy(_flat.Weights, 0,
-                                          worker.Weights, 0, _flat.Weights.Length);
+                    EngineArray.ArrayCopy(_flat.Weights, 0, worker.Weights, 0, _flat.Weights.Length);
                 }
 
                 if (_flat.HasContext)
@@ -223,7 +224,7 @@ namespace Encog.Neural.Networks.Training.Propagation
 
                 PostIteration();
 
-                EncogLogging.Log(EncogLogging.LevelInfo,
+                EncogLogging.Log(EncogLogging.LogLevel.Info,
                                  "Training iterations done, error: " + Error);
             }
             catch (IndexOutOfRangeException ex)
@@ -233,7 +234,7 @@ namespace Encog.Neural.Networks.Training.Propagation
                 throw new EncogError(ex);
             }
         }
-        
+
         /// <value>The gradients from the last iteration;</value>
         public double[] LastGradient
         {
@@ -305,7 +306,7 @@ namespace Encog.Neural.Networks.Training.Propagation
 
             _totalError = 0;
 
-            Parallel.ForEach(_workers, worker => worker.Run());
+           Parallel.ForEach(_workers, worker => worker.Run());
             
 
             CurrentError = _totalError / _workers.Length;
@@ -343,7 +344,7 @@ namespace Encog.Neural.Networks.Training.Propagation
                 for (int i = 0; i < _flat.ActivationFunctions.Length; i++)
                 {
                     IActivationFunction af = _flat.ActivationFunctions[i];
-                    if( af is ActivationSigmoid )
+                    if (af is ActivationSigmoid)
                     {
                         _flatSpot[i] = 0.1;
                     }
@@ -436,6 +437,7 @@ namespace Encog.Neural.Networks.Training.Propagation
                         Gradients[i] += gradients[i];
                     }
                     _totalError += error;
+                    Encog.EncogFramework.Instance.LoggingPlugin.LogTrace("Report worker thread current Error:" + _totalError);
                 }
                 else
                 {

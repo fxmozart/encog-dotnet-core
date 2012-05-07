@@ -33,6 +33,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Encog.Util
 {
+    using Encog.MathUtil;
+
+    [TestClass]
     public class NetworkUtil
     {
         public static BasicNetwork CreateXORNetworkUntrained()
@@ -77,8 +80,29 @@ namespace Encog.Util
             double error2 = train.Error;
 
             double improve = (error1 - error2) / error1;
-            Assert.IsTrue(improve >= requiredImprove,"Improve rate too low for " + train.GetType().Name +
+            Assert.IsTrue(improve >= requiredImprove, "Improve rate too low for " + train.GetType().Name +
                     ",Improve=" + improve + ",Needed=" + requiredImprove);
+        }
+        [TestMethod]
+        public void TestDateNormalizeDaysEncode()
+        {
+            var eq = new Equilateral(DateTime.DaysInMonth(2012, 1), -1, 1);
+            var encoded = eq.Encode(15);
+            StringBuilder b = new StringBuilder(encoded.Length);
+            for (int i = 0; i < encoded.Length; i++)
+            {
+                if (i < encoded.Length - 1)
+                    b.Append(encoded[i] + ",");
+                else b.Append(encoded[i]);
+            }
+            Console.WriteLine("Encoded 15 to Equilaterable " + b.ToString());
+            Assert.IsNotNull(encoded, "Encoded is not null");
+            Assert.IsTrue(encoded[14].ToString() == "-0.984250984251476");
+            //Now we get the day back..
+
+            int res = eq.Decode(encoded);
+            Console.WriteLine("Result decode == " + res);
+            Assert.AreEqual(15, res, "Decoded back to 15");
         }
     }
 }

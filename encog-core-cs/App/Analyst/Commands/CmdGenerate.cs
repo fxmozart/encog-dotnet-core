@@ -70,8 +70,7 @@ namespace Encog.App.Analyst.Commands
         private int[] DetermineIdealFields(CSVHeaders headerList)
         {
             int[] result;
-            String type = Prop.GetPropertyString(
-                ScriptProperties.MlConfigType);
+            String type = Prop.GetPropertyString(ScriptProperties.MlConfigType);
 
             // is it non-supervised?
             if (type.Equals(MLMethodFactory.TypeSOM))
@@ -86,8 +85,7 @@ namespace Encog.App.Analyst.Commands
             {
                 String baseName = headerList.GetBaseHeader(currentIndex);
                 int slice = headerList.GetSlice(currentIndex);
-                AnalystField field = Analyst.Script
-                    .FindNormalizedField(baseName, slice);
+                AnalystField field = Analyst.Script.FindNormalizedField(baseName, slice);
 
                 if (field != null && field.Output)
                 {
@@ -119,8 +117,7 @@ namespace Encog.App.Analyst.Commands
             {
                 String baseName = headerList.GetBaseHeader(currentIndex);
                 int slice = headerList.GetSlice(currentIndex);
-                AnalystField field = Analyst.Script
-                    .FindNormalizedField(baseName, slice);
+                AnalystField field = Analyst.Script.FindNormalizedField(baseName, slice);
 
                 if (field != null && field.Input)
                 {
@@ -151,9 +148,9 @@ namespace Encog.App.Analyst.Commands
                 ScriptProperties.GenerateConfigTargetFile);
             CSVFormat format = Analyst.Script.DetermineFormat();
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning generate");
-            EncogLogging.Log(EncogLogging.LevelDebug, "source file:" + sourceID);
-            EncogLogging.Log(EncogLogging.LevelDebug, "target file:" + targetID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning generate");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "source file:" + sourceID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "target file:" + targetID);
 
             FileInfo sourceFile = Script.ResolveFilename(sourceID);
             FileInfo targetFile = Script.ResolveFilename(targetID);

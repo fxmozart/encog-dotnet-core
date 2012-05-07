@@ -70,9 +70,9 @@ namespace Encog.App.Analyst.Commands
             FileInfo sourceFile = Script.ResolveFilename(sourceID);
             FileInfo targetFile = Script.ResolveFilename(targetID);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning normalize");
-            EncogLogging.Log(EncogLogging.LevelDebug, "source file:" + sourceID);
-            EncogLogging.Log(EncogLogging.LevelDebug, "target file:" + targetID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning normalize");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "source file:" + sourceID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "target file:" + targetID);
 
             // mark generated
             Script.MarkGenerated(targetID);

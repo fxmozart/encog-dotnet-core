@@ -140,7 +140,7 @@ namespace Encog.Neural.Networks.Training.Anneal
         ///
         public override sealed void Iteration()
         {
-            EncogLogging.Log(EncogLogging.LevelInfo,
+            EncogLogging.Log(EncogLogging.LogLevel.Info,
                              "Performing Simulated Annealing iteration.");
             PreIteration();
             _anneal.Iteration();

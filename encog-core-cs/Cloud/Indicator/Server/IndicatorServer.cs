@@ -85,9 +85,9 @@ namespace Encog.Cloud.Indicator.Server
             {
                 try
                 {
-                    EncogLogging.Log(EncogLogging.LevelDebug, "Begin listen");
+                    EncogLogging.Log(EncogLogging.LogLevel.Debug, "Begin listen");
                     Socket connectionSocket = listenSocket.Accept();
-                    EncogLogging.Log(EncogLogging.LevelDebug, "Connection from: " + connectionSocket.RemoteEndPoint.ToString());
+                    EncogLogging.Log(EncogLogging.LogLevel.Debug, "Connection from: " + connectionSocket.RemoteEndPoint.ToString());
                     IndicatorLink link = new IndicatorLink(this, connectionSocket);
                     NotifyListenersConnections(link, true);
                     HandleClient hc = new HandleClient(this, link);

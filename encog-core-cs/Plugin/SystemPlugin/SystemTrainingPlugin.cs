@@ -142,9 +142,9 @@ namespace Encog.Plugin.SystemPlugin
         /// <summary>
         /// This is a type-1 plugin.
         /// </summary>
-        public int PluginType
+        public EncogPluginType PluginType
         {
-            get { return 1; }
+            get { return EncogPluginType.Training; }
         }
 
 
@@ -252,9 +252,9 @@ namespace Encog.Plugin.SystemPlugin
         }
 
         /// <inheritdoc/>
-        public int PluginServiceType
+        public ServiceType PluginServiceType
         {
-            get { return EncogPluginBaseConst.SERVICE_TYPE_GENERAL; }
+            get { return ServiceType.GENERAL; }
         }
 
         #endregion

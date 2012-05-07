@@ -24,48 +24,18 @@ using System;
 
 namespace Encog.Util.Logging
 {
+    using Encog.Plugin;
+
+
     /// <summary>
     /// This class provides logging for Encog. Programs using Encog can make use of
     /// it as well. All logging is passed on to the current logging plugin. By
     /// default the SystemLoggingPlugin is used.
     /// </summary>
-    ///
     public class EncogLogging
     {
-        /// <summary>
-        /// The lowest level log type. Debug logging provides low-level Encog
-        /// diagnostics that may slow performance, but allow you to peer into the
-        /// inner workings.
-        /// </summary>
-        ///
-        public const int LevelDebug = 0;
-
-        /// <summary>
-        /// Info logging tells you when major processes start and stop.
-        /// </summary>
-        ///
-        public const int LevelInfo = 1;
-
-        /// <summary>
-        /// Error level tells you about errors, less important to critical.
-        /// </summary>
-        ///
-        public const int LevelError = 2;
-
-        /// <summary>
-        /// Critical logging logs errors that cannot be recovered from.
-        /// </summary>
-        ///
-        public const int LevelCritical = 3;
-
-        /// <summary>
-        /// Logging is disabled at this level.
-        /// </summary>
-        ///
-        public const int LevelDisable = 4;
-
         /// <value>The current logging level.</value>
-        public int CurrentLevel
+        public EncogLogging.LogLevel CurrentLevel
         {
             get { return EncogFramework.Instance.LoggingPlugin.LogLevel; }
         }
@@ -76,7 +46,7 @@ namespace Encog.Util.Logging
         ///
         /// <param name="level">The level to log at.</param>
         /// <param name="message">The message to log.</param>
-        public static void Log(int level, String message)
+        public static void Log(LogLevel level, String message)
         {
             EncogFramework.Instance.LoggingPlugin.Log(level, message);
         }
@@ -84,10 +54,9 @@ namespace Encog.Util.Logging
         /// <summary>
         /// Log the error.
         /// </summary>
-        ///
         /// <param name="level">The level to log at.</param>
         /// <param name="t">The exception to log.</param>
-        public static void Log(int level, Exception t)
+        public static void Log(LogLevel level, Exception t)
         {
             EncogFramework.Instance.LoggingPlugin.Log(level, t);
         }
@@ -95,11 +64,51 @@ namespace Encog.Util.Logging
         /// <summary>
         /// Log the error at ERROR level.
         /// </summary>
-        ///
         /// <param name="t">The exception to log.</param>
         public static void Log(Exception t)
         {
-            Log(LevelError, t);
+            Log(LogLevel.Error, t);
+        }
+
+        /// <summary>
+        ///  Values that represent LogLevel.
+        /// </summary>
+        public enum LogLevel
+        {
+            /// <summary>
+            ///  This stops all logging.
+            /// </summary>
+            None = 0,
+
+            /// <summary>
+            /// This is the lowest level of tracing.
+            /// </summary>
+            Trace = 1,
+
+            /// <summary>
+            ///  All debugging information will be printed to the logger.
+            /// </summary>
+            Debug = 2,
+
+            /// <summary>
+            ///  All informational logs will be printed to the current logger.
+            /// </summary>
+            Info = 3,
+
+            /// <summary>
+            ///  All warnings will be printed to the current logger (all below won't).
+            /// </summary>
+            Warn = 4,
+
+            /// <summary>
+            ///  Only errors are printed to the current logger.
+            /// </summary>
+            Error = 5,
+
+            /// <summary>
+            ///  This kind of errors happen and will most likely crash your instance.
+            /// </summary>
+            Critical = 6
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Encog.Examples.Analyst
             get
             {
                 var info = new ExampleInfo(
-                    typeof (AnalystExample),
+                    typeof(AnalystExample),
                     "analyst",
                     "Encog Analyst",
                     "This example shows how to use Encog analyst from code.");
@@ -108,18 +108,14 @@ namespace Encog.Examples.Analyst
             var url = new Uri(FOREST_SOURCE);
             FileInfo analystFile = FileUtil.CombinePath(dir, "forest.ega");
             FileInfo rawFile = FileUtil.CombinePath(dir, "forest_raw.csv");
-
             var encog = new EncogAnalyst();
             encog.AddAnalystListener(new ConsoleAnalystListener());
             var wiz = new AnalystWizard(encog);
             wiz.TaskBalance = true;
-
             wiz.Wizard(url, analystFile, rawFile, false, AnalystFileFormat.DecpntComma);
             encog.MaxIteration = 300;
             encog.ExecuteTask("task-full");
-
             encog.Save(analystFile);
-
             var report = new AnalystReport(encog);
             report.ProduceReport(FileUtil.CombinePath(dir, "report.html"));
         }

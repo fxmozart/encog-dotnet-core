@@ -43,7 +43,7 @@ namespace Encog.Cloud.Indicator.Server
         /// </summary>
         public void run()
         {
-            EncogLogging.Log(EncogLogging.LevelDebug, "Waiting for packets");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Waiting for packets");
 
             try
             {
@@ -83,21 +83,21 @@ namespace Encog.Cloud.Indicator.Server
             {
                 if (ex.GetBaseException() == null)
                 {
-                    EncogLogging.Log(EncogLogging.LevelDebug,
+                    EncogLogging.Log(EncogLogging.LogLevel.Debug,
                             "Error, ending connection:" + ex.Message);
                     String[] args = { ex.Message };
                     Link.WritePacket("error", args);
                 }
                 else
                 {
-                    EncogLogging.Log(EncogLogging.LevelDebug,
+                    EncogLogging.Log(EncogLogging.LogLevel.Debug,
                             "Client ended connection:" + ex.Message);
                 }
                 this.done = true;
             }
             catch (Exception t)
             {
-                EncogLogging.Log(EncogLogging.LevelCritical, t);
+                EncogLogging.Log(EncogLogging.LogLevel.Critical, t);
             }
             finally
             {
@@ -108,7 +108,7 @@ namespace Encog.Cloud.Indicator.Server
                     this.listener.NotifyTermination();
                 }
                 this.server.NotifyListenersConnections(Link, false);
-                EncogLogging.Log(EncogLogging.LevelDebug,
+                EncogLogging.Log(EncogLogging.LogLevel.Debug,
                         "Shutting down client handler");
                 Link.Close();
             }

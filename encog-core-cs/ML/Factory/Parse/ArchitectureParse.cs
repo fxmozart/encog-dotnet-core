@@ -58,6 +58,23 @@ namespace Encog.ML.Factory.Parse
             // see if simple number
             try
             {
+                //This below just removes half the exceptions (not all in case it's TAHN or similar...).
+                //Lets first check if the char is a digit...
+                if (!char.IsDigit(Convert.ToChar(check.Substring(0, 1))))
+                {
+                    //Its not a digits, its probably a ? , meaning a default value.
+                    // see if it is a default
+                    if ("?".Equals(check))
+                    {
+                        if (defaultValue < 0)
+                        {
+                            throw new EncogError("Default (?) in an invalid location.");
+                        }
+                        layer.Count = defaultValue;
+                        layer.UsedDefault = true;
+                        return layer;
+                    }
+                }
                 layer.Count = Int32.Parse(check);
                 if (layer.Count < 0)
                 {

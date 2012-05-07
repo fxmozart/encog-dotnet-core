@@ -87,8 +87,8 @@ namespace Encog.App.Analyst.Commands
             String args = Prop.GetPropertyString(
                 ScriptProperties.MlTrainArguments);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "training type:" + type);
-            EncogLogging.Log(EncogLogging.LevelDebug, "training args:" + args);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "training type:" + type);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "training args:" + args);
 
             IMLTrain train = factory.Create(method, trainingSet, type, args);
 
@@ -111,7 +111,7 @@ namespace Encog.App.Analyst.Commands
             IMLMethod method = ObtainMethod();
             IMLTrain trainer = CreateTrainer(method, trainingSet);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning training");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning training");
 
             PerformTraining(trainer, method, trainingSet);
 
@@ -121,7 +121,7 @@ namespace Encog.App.Analyst.Commands
                 resourceID);
             method = trainer.Method;
             EncogDirectoryPersistence.SaveObject(resourceFile, method);
-            EncogLogging.Log(EncogLogging.LevelDebug, "save to:" + resourceID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "save to:" + resourceID);
 
             return Analyst.ShouldStopCommand();
         }

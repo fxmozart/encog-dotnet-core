@@ -66,9 +66,9 @@ namespace Encog.App.Analyst.Commands
             String targetID = Prop.GetPropertyString(
                 ScriptProperties.RandomizeConfigTargetFile);
 
-            EncogLogging.Log(EncogLogging.LevelDebug, "Beginning randomize");
-            EncogLogging.Log(EncogLogging.LevelDebug, "source file:" + sourceID);
-            EncogLogging.Log(EncogLogging.LevelDebug, "target file:" + targetID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "Beginning randomize");
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "source file:" + sourceID);
+            EncogLogging.Log(EncogLogging.LogLevel.Debug, "target file:" + targetID);
 
             FileInfo sourceFile = Script.ResolveFilename(sourceID);
             FileInfo targetFile = Script.ResolveFilename(targetID);

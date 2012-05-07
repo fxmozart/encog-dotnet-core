@@ -97,7 +97,7 @@ namespace Encog.ML.Train.Strategy
             {
                 if (_train.Error > _lastError)
                 {
-                    EncogLogging.Log(EncogLogging.LevelDebug,
+                    EncogLogging.Log(EncogLogging.LogLevel.Debug,
                                      "Greedy strategy dropped last iteration.");
                     _train.Error = _lastError;
                     _method.DecodeFromArray(_lastNetwork);

@@ -88,13 +88,11 @@ namespace Encog
         /// <summary>
         /// The current logging plugin.
         /// </summary>
-        ///
         private IEncogPluginLogging1 _loggingPlugin;
 
         /// <summary>
         /// The plugins.
         /// </summary>
-        ///
         private readonly IList<EncogPluginBase> _plugins;
 
         /// <summary>
@@ -160,16 +158,29 @@ namespace Encog
         public void RegisterPlugin(EncogPluginBase plugin)
         {
             // is it not a general plugin?
-            if (plugin.PluginServiceType != EncogPluginBaseConst.SERVICE_TYPE_GENERAL)
+            //if (plugin.PluginServiceType != EncogPluginBaseConst.SERVICE_TYPE_GENERAL)
+            //{
+            //    if (plugin.PluginServiceType == EncogPluginBaseConst.SERVICE_TYPE_LOGGING)
+            //    {
+            //        // remove the old logging plugin
+            //        if (_loggingPlugin != null)
+            //        {
+            //            _plugins.Remove(_loggingPlugin);
+            //        }
+            //        _loggingPlugin = (IEncogPluginLogging1) plugin;
+            //    }
+            //}
+
+            if (plugin.PluginServiceType != ServiceType.GENERAL)
             {
-                if (plugin.PluginServiceType == EncogPluginBaseConst.SERVICE_TYPE_LOGGING)
+                if (plugin.PluginServiceType == ServiceType.LOGGING)
                 {
                     // remove the old logging plugin
                     if (_loggingPlugin != null)
                     {
                         _plugins.Remove(_loggingPlugin);
                     }
-                    _loggingPlugin = (IEncogPluginLogging1) plugin;
+                    _loggingPlugin = (IEncogPluginLogging1)plugin;
                 }
             }
             // add to the plugins

@@ -35,25 +35,21 @@ namespace Encog.App.Analyst.Script
         /// <summary>
         /// THe code for the class item.
         /// </summary>
-        ///
         private String _code;
 
         /// <summary>
         /// THe count.
         /// </summary>
-        ///
         private int _count;
 
         /// <summary>
         /// The name for the class item.
         /// </summary>
-        ///
         private String _name;
 
         /// <summary>
         /// Construct a class item.
         /// </summary>
-        ///
         /// <param name="theCode">The code, this is how it is in the CSV.</param>
         /// <param name="theName"></param>
         /// <param name="theCount">The count.</param>
@@ -65,8 +61,12 @@ namespace Encog.App.Analyst.Script
             _count = theCount;
         }
 
-
-        /// <value>the code to set</value>
+        /// <summary>
+        ///  Gets or sets the code for this analyst class item.
+        /// </summary>
+        /// <value>
+        ///  the code to set.
+        /// </value>
         public String Code
         {
             get { return _code; }
@@ -91,20 +91,19 @@ namespace Encog.App.Analyst.Script
         #region IComparable<AnalystClassItem> Members
 
         /// <summary>
-        /// 
+        /// Compares 2 analyst class items by their code.
         /// </summary>
         ///
         public int CompareTo(AnalystClassItem o)
         {
-            return String.CompareOrdinal(_code, o.Code);
+            return string.CompareOrdinal(_code, o.Code);
         }
 
         #endregion
 
         /// <summary>
-        /// Increase the count.
+        ///  Increase the count.(Used internally to increase the classitem count.
         /// </summary>
-        ///
         public void IncreaseCount()
         {
             _count++;

@@ -144,8 +144,7 @@ namespace Encog.App.Analyst.Analyze
         public void Process(EncogAnalyst target)
         {
             int count = 0;
-            CSVFormat csvFormat = ConvertStringConst
-                .ConvertToCSVFormat(_format);
+            CSVFormat csvFormat = ConvertStringConst.ConvertToCSVFormat(_format);
             var csv = new ReadCSV(_filename, _headers, csvFormat);
 
             // pass one, calculate the min/max
@@ -205,8 +204,7 @@ namespace Encog.App.Analyst.Analyze
 
             csv.Close();
 
-            String str = _script.Properties.GetPropertyString(
-                ScriptProperties.SetupConfigAllowedClasses) ?? "";
+            string str = _script.Properties.GetPropertyString(ScriptProperties.SetupConfigAllowedClasses) ?? string.Empty;
 
             bool allowInt = str.Contains("int");
             bool allowReal = str.Contains("real")
@@ -279,7 +277,7 @@ namespace Encog.App.Analyst.Analyze
         /// 
         /// </summary>
         ///
-        public override sealed String ToString()
+        public override sealed string ToString()
         {
             var result = new StringBuilder("[");
             result.Append(GetType().Name);
