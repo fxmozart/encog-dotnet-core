@@ -1,0 +1,11 @@
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\NLogEncogLogger.dll
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\NLogEncogLogger.pdb
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\encog-core-cs.dll
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\Growl.CoreLibrary.dll
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\encog-core-cs.pdb
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\bin\Debug\encog-core-cs.xml
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\obj\Debug\NLogEncogLogger.csprojResolveAssemblyReference.cache
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\obj\Debug\NLogEncogLogger.dll
+C:\Gits\LatestEncog\Encog Direct Git\NLogEncogLogger\obj\Debug\NLogEncogLogger.pdb
+C:\Gits\LatestEncog\Encog Direct Git\encog-core-test\bin\Debug\NLogEncogLogger.dll
+C:\Gits\LatestEncog\Encog Direct Git\encog-core-test\bin\Debug\NLogEncogLogger.pdb
