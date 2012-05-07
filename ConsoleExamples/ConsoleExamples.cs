@@ -55,7 +55,7 @@ using Encog.Examples.XOR;
 using Encog.Examples.CSVMarketExample;
 using Encog.Examples.ForexExample;
 using Encog.Examples.Bayesian;
-using Encog.Examples.LiveSimul;
+using Encog.Examples.Indicator.Ninja;
 namespace ConsoleExamples
 {
     /// <summary>
@@ -112,7 +112,8 @@ namespace ConsoleExamples
             examples.Add(ElliottBenchmark.Info);
             examples.Add(XORPSO.Info);
             examples.Add(BayesianTaxi.Info);
-            examples.Add(LiveSimul.Info);
+            examples.Add(SunspotWindow.Info);
+            examples.Add(ImportNinjaData.Info);
         }
 
         public void ListCommands()
@@ -162,39 +163,39 @@ namespace ConsoleExamples
                 return;
             }
 
-            do
-            {
-                String command = args[index++];
+			do
+			{
+				String command = args[index++];
 
-                // get any arguments
-                var pargs = new String[args.Length - index];
-                for (int i = 0; i < pargs.Length; i++)
-                {
-                    pargs[i] = args[index + i];
-                }
+				// get any arguments
+				var pargs = new String[args.Length - index];
+				for(int i = 0; i < pargs.Length; i++)
+				{
+					pargs[i] = args[index + i];
+				}
 
-                foreach (ExampleInfo info in examples)
-                {
-                    if (String.Compare(command, info.Command, true) == 0)
-                    {
-                        IExample example = info.CreateInstance();
-                        example.Execute(new ConsoleInterface(pargs));
-                        success = true;
-                        break;
-                    }
-                }
+				foreach(ExampleInfo info in examples)
+				{
+					if(String.Compare(command, info.Command, true) == 0)
+					{
+						IExample example = info.CreateInstance();
+						example.Execute(new ConsoleInterface(pargs));
+						success = true;
+						break;
+					}
+				}
 
-                if (!success)
-                {
-                    Console.WriteLine("Unknown command: " + command);
-                    ListCommands();
-                }
+				if(!success)
+				{
+					Console.WriteLine("Unknown command: " + command);
+					ListCommands();
+				}
 
-                if (pause)
-                {
-                    Pause();
-                }
-            } while (index < args.Length);
+				if(pause)
+				{
+					Pause();
+				}
+			} while(index < args.Length);
 
         }
 
