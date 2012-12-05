@@ -26,7 +26,7 @@ using Encog.Examples;
 
 namespace ConsoleExamples.Examples
 {
-    public class ExampleInfo : IComparable<ExampleInfo>
+    public class ExampleInfo : IComparable<ExampleInfo>, IExampleInfo
     {
         public ExampleInfo(Type type, String command, String title, String description)
         {

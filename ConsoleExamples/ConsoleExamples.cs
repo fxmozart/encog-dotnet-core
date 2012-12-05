@@ -58,6 +58,8 @@ using Encog.Examples.Bayesian;
 using Encog.Examples.Indicator.Ninja;
 namespace ConsoleExamples
 {
+    using Encog.Examples.ObservableNetwork;
+
     /// <summary>
     /// Console examples
     /// 
@@ -114,6 +116,7 @@ namespace ConsoleExamples
             examples.Add(BayesianTaxi.Info);
             examples.Add(SunspotWindow.Info);
             examples.Add(ImportNinjaData.Info);
+            examples.Add(ObservableExample.Info);
         }
 
         public void ListCommands()

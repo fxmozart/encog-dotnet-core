@@ -11,6 +11,7 @@ namespace Encog.MEF
     using System.Reflection;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NLogEncogLogger;
 
     [TestClass]
     public class TestMEF
@@ -30,6 +31,10 @@ namespace Encog.MEF
         [Import(typeof(IStatusReportable))]
         public IStatusReportable reporter;
 
+
+        /// <summary>
+        /// To run this test you need to click on the Nlog.Config of the nlog logger and make it output.
+        /// </summary>
         [TestMethod]
         public void TestMefStatusReportable()
         {
@@ -59,6 +64,7 @@ namespace Encog.MEF
 
             reporter.Report(2,1,"Test Report");
 
+            Assert.IsInstanceOfType(reporter,typeof(NLogEncogLogger),"Logger is of type nlog via mef.");
         }
     }
 }

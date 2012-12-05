@@ -135,6 +135,10 @@
       <Project>{AC6FADF9-0904-4EBD-B22C-1C787C7E7A95}</Project>
       <Name>encog-core-cs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NLogEncogLogger\NLogEncogLogger.csproj">
+      <Project>{43EF5C9E-5893-48D8-98B0-70655D69FF23}</Project>
+      <Name>NLogEncogLogger</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\xor-nn.eg" />

@@ -22,6 +22,9 @@
 //
 namespace Encog.Examples
 {
+    using System.ComponentModel.Composition;
+
+    [InheritedExport]
     public interface IExample
     {
         void Execute(IExampleInterface app);

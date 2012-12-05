@@ -124,6 +124,11 @@ namespace Encog.Util.NetworkUtil
             }
             return returnedArrays;
         }
+
+
+
+
+
         /// <summary>
         /// parses one column of a csv and returns an array of doubles.
         /// you can only return one double array with this method.

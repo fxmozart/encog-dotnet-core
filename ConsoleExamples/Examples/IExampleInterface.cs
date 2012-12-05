@@ -24,6 +24,9 @@ using System;
 
 namespace Encog.Examples
 {
+    using System.ComponentModel.Composition;
+
+    [InheritedExport]
     public interface IExampleInterface
     {
         String[] Args { get; }

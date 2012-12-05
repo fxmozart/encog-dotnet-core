@@ -27,6 +27,8 @@ using System.Text;
 
 namespace Encog.Util.File
 {
+    using System.Diagnostics.Contracts;
+
     /// <summary>
     /// Used to load data from resources.
     /// </summary>
@@ -43,9 +45,11 @@ namespace Encog.Util.File
         /// Create a stream to read the resource.
         /// </summary>
         /// <param name="resource">The resource to load.  This should be in the form Encog.Resources.classes.txt</param>
-        /// <returns>A stream.</returns>
-        public static Stream CreateStream(String resource)
+        /// <returns>A stream with the Manifest resource stream..</returns>
+        public static Stream CreateStream(string resource)
         {
+            Contract.Requires(resource!=null);
+
             Stream result = null;
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -55,7 +59,6 @@ namespace Encog.Util.File
                 if (result != null)
                     break;
             }
-
             return result;
         }
 
@@ -64,8 +67,9 @@ namespace Encog.Util.File
         /// </summary>
         /// <param name="resource">The resource to load.</param>
         /// <returns>The loaded string.</returns>
-        public static String LoadString(String resource)
+        public static string LoadString(string resource)
         {
+            Contract.Requires(resource!=null);
             var result = new StringBuilder();
             Stream istream = CreateStream(resource);
             var sr = new StreamReader(istream);
